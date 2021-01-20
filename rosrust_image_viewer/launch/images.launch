@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="image_publisher" type="image_publisher"
+    name="image_pub" output="screen"
+    args="$(find image_manip)/data/lava.jpg" >
+    <param name="publish_rate" value="10.0"/>
+  </node>
+
+  <node pkg="rosrust_image" type="image_viewer"
+    name="image_viewer" output="screen" >
+    <remap from="image_in" to="image_pub/image_raw" />
+  </node>
+
+</launch>

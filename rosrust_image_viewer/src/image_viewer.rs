@@ -1,5 +1,7 @@
 use byteorder::{WriteBytesExt, BigEndian};
 use pixels::{Pixels, SurfaceTexture};
+use rosrust_msg::sensor_msgs::Image;
+use rosrust::api::raii as ros;
 use std::{fmt, thread, time};
 use winit::dpi::{LogicalPosition, LogicalSize, PhysicalSize};
 use winit::event::{Event, VirtualKeyCode};
@@ -19,6 +21,18 @@ fn main() {
     let mut pixels = Pixels::new(screen_width, screen_height, surface_texture).unwrap();
     let mut paused = false;
 
+    rosrust::init("image_viewer");
+
+    let image_callback = {
+        move |msg: Image| {
+            rosrust::ros_info!("msg {} {}", msg.width, msg.height);
+        }
+    };
+
+    let _image_sub = rosrust::subscribe("image_in", 4, image_callback).unwrap();
+
+    let rate = rosrust::rate(30.0);
+
     event_loop.run(move |event, _, control_flow| {
         // The one and only event that winit_input_helper doesn't have for us...
         if let Event::RedrawRequested(_) = event {
@@ -33,8 +47,6 @@ fn main() {
                 *control_flow = ControlFlow::Exit;
                 return;
             }
-
-            thread::sleep(time::Duration::from_millis(33));
         }
 
         // For everything else, for let winit_input_helper collect events to build its state.
@@ -57,6 +69,14 @@ fn main() {
 
             window.request_redraw();
         }
+
+        if !rosrust::is_ok() {
+            *control_flow = ControlFlow::Exit;
+            return;
+        }
+
+        // thread::sleep(time::Duration::from_millis(33));
+        rate.sleep();
     });  // event_loop.run
 }
 
