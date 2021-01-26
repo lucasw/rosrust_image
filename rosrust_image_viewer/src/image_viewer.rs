@@ -1,9 +1,9 @@
-use byteorder::{WriteBytesExt, BigEndian};
+// use byteorder::{WriteBytesExt, BigEndian};
 use pixels::{Pixels, SurfaceTexture};
 use rosrust_msg::sensor_msgs::Image;
-use rosrust::api::raii as ros;
+// use rosrust::api::raii as ros;
 use std::sync::{Arc, Mutex};
-use std::{fmt, mem, thread, time};
+// use std::{fmt, mem, thread, time};
 use winit::dpi::{LogicalPosition, LogicalSize, PhysicalSize};
 use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
@@ -19,12 +19,14 @@ fn main() {
         create_window("Image Viewer", screen_width, screen_height, &event_loop);
     let surface_texture = SurfaceTexture::new(p_width, p_height, &window);
 
-    let mut pixels = Pixels::new(screen_width, screen_height, surface_texture).unwrap();
+    // The compiler says this shouldn't be mut, but why not?  It's mut later
+    // when it is extracted from the mutex.
+    let pixels = Pixels::new(screen_width, screen_height, surface_texture).unwrap();
     let pixels_mutex = Mutex::new(pixels);
     let pixels_arc1 = Arc::new(pixels_mutex);
     let pixels_arc2 = pixels_arc1.clone();
 
-    let mut paused = false;
+    // let mut paused = false;
 
     rosrust::init("image_viewer");
 
@@ -42,10 +44,10 @@ fn main() {
                 let x = (ind / msg.width) as u32;
                 let y = (ind % msg.width) as u32;
 
-                if (x >= screen_width) {
+                if x >= screen_width {
                     continue;
                 }
-                if (y >= screen_height) {
+                if y >= screen_height {
                     continue;
                 }
 
