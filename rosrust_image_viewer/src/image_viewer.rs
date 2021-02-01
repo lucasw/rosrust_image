@@ -9,7 +9,6 @@ use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit_input_helper::WinitInputHelper;
 
-
 fn main() {
     let screen_width: u32 = 800;
     let screen_height: u32 = 600;
@@ -118,7 +117,7 @@ fn main() {
 
         // thread::sleep(time::Duration::from_millis(33));
         rate.sleep();
-    });  // event_loop.run
+    }); // event_loop.run
 }
 
 // TODO(lucasw) put into library
@@ -179,4 +178,3 @@ fn create_window(
         hidpi_factor,
     )
 }
-
