@@ -124,7 +124,7 @@ jobs:
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           cd catkin_ws
-          catkin build
+          catkin build --no-status
       - name: lint
         run: |
           cd catkin_ws
