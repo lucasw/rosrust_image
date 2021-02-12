@@ -28,6 +28,9 @@ jobs:
             repository: lucasw/roslint
             ref: roslint_rust
             path: catkin_ws/src
+      - name: see contents of catkin_ws/src
+        run: |
+            ls -l catkin_ws/src
       - name: Install latest rust
         run: |
           curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
