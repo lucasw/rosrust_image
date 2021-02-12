@@ -131,11 +131,11 @@ jobs:
           source devel/setup.bash
           catkin list --depends-on roslint -u
           # catkin build $(catkin list --depends-on roslint -u) --no-deps --catkin-make-args roslint
-          catkin build rosrust_image --no-deps --catkin-make-args roslint
+          catkin build rosrust_image --no-status --no-deps --catkin-make-args roslint
       - name: build install
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           cd catkin_ws
           rm -rf build devel logs
           catkin config --install
-          catkin build
+          catkin build --no-status
