@@ -124,4 +124,5 @@ jobs:
           catkin build
       - name: lint
         run: |
+          cd catkin_ws
           catkin build $(catkin list --depends-on roslint -u) --no-deps --catkin-make-args roslint
