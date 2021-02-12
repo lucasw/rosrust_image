@@ -125,4 +125,13 @@ jobs:
       - name: lint
         run: |
           cd catkin_ws
-          catkin build $(catkin list --depends-on roslint -u) --no-deps --catkin-make-args roslint
+          source devel/setup.bash
+          catkin list --depends-on roslint -u
+          # catkin build $(catkin list --depends-on roslint -u) --no-deps --catkin-make-args roslint
+          catkin build rosrust_image --no-deps --catkin-make-args roslint
+      - name: build install
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          cd catkin_ws
+          catkin config --install
+          catkin build
