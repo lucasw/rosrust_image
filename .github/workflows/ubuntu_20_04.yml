@@ -138,4 +138,5 @@ jobs:
           cd catkin_ws
           rm -rf build devel logs
           catkin config --install
+          catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
           catkin build --no-status
