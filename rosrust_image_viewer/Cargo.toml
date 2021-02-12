@@ -8,8 +8,16 @@ edition = "2018"
 name = "image_viewer"
 path = "src/image_viewer.rs"
 
+# Performance of pixels screen updating is poor without a higher opt-level
 [profile.dev]
 opt-level = 2
+
+# need catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
+# and profile.release will be used
+# the settings below are redundant
+# [profile.release]
+# opt-level = 3
+# debug = 0
 
 [dependencies]
 byteorder = "1.3"
