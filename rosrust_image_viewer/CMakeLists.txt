@@ -5,9 +5,13 @@ project(rosrust_image)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  roslint
   sensor_msgs
   # std_msgs
 )
+
+# this requires a custom roslint version
+roslint_rust()
 
 find_package(Corrosion REQUIRED)
 
