@@ -15,19 +15,19 @@ jobs:
       - name: rosrust_image
         uses: actions/checkout@v2
         with:
-            path: catkin_ws/src
+            path: catkin_ws/src/rosrust_image
       - name: ros_comm
         uses: actions/checkout@v2
         with:
             repository: lucasw/ros_comm
             ref: noetic_rosrust
-            path: catkin_ws/src
+            path: catkin_ws/src/ros_comm
       - name: roslint
         uses: actions/checkout@v2
         with:
             repository: lucasw/roslint
             ref: roslint_rust
-            path: catkin_ws/src
+            path: catkin_ws/src/roslint
       - name: see contents of catkin_ws/src
         run: |
             ls -l catkin_ws/src
