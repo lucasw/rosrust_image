@@ -62,7 +62,7 @@ fn main() {
                 let val = from_rgb(
                     msg.data[msg_byte_base_ind + 2],
                     msg.data[msg_byte_base_ind + 1],
-                    msg.data[msg_byte_base_ind + 0],
+                    msg.data[msg_byte_base_ind],
                 );
                 pix.write_u32::<BigEndian>(val).unwrap();
             }
@@ -75,7 +75,7 @@ fn main() {
 
     let _image_sub = rosrust::subscribe("image_in", 4, image_callback).unwrap();
 
-    let rate = rosrust::rate(30.0);
+    // let rate = rosrust::rate(30.0);
 
     event_loop.run(move |event, _, control_flow| {
         // The one and only event that winit_input_helper doesn't have for us...
