@@ -8,6 +8,10 @@ edition = "2018"
 name = "image_viewer"
 path = "src/image_viewer.rs"
 
+[[bin]]
+name = "image_dir_pub"
+path = "src/image_dir_pub.rs"
+
 # Performance of pixels screen updating is poor without a higher opt-level
 [profile.dev]
 opt-level = 2
@@ -21,6 +25,8 @@ opt-level = 2
 
 [dependencies]
 byteorder = "1.3"
+env_logger = "0.8"
+image = "0.23"
 pixels = "0.2.0"
 rosrust = { git = "https://github.com/lucasw/rosrust", branch = "noetic_aggregated" }
 rosrust_msg = { git = "https://github.com/lucasw/rosrust", branch = "noetic_aggregated" }

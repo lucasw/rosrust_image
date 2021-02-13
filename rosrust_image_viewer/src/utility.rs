@@ -1,6 +1,10 @@
 use winit::dpi::{LogicalPosition, LogicalSize, PhysicalSize};
 use winit::event_loop::EventLoop;
 
+pub fn from_rgb(r: u8, g: u8, b: u8) -> u32 {
+    (r as u32) << 24 | (g as u32) << 16 | (b as u32) << 8
+}
+
 /// Create a window for the application.
 ///
 /// Automatically scales the window to cover about 2/3 of the monitor height.

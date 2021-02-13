@@ -40,3 +40,4 @@ function(rust_target target_name)
 endfunction(rust_target)
 
 rust_target(image_viewer)
+rust_target(image_dir_pub)

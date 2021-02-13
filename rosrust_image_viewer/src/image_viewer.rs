@@ -5,15 +5,11 @@ use pixels::{Pixels, SurfaceTexture};
 use rosrust_msg::sensor_msgs::Image;
 // use rosrust::api::raii as ros;
 use std::sync::{Arc, Mutex};
-use utility::create_window;
+use utility::{create_window, from_rgb};
 // use std::{fmt, mem, thread, time};
 use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit_input_helper::WinitInputHelper;
-
-pub fn from_rgb(r: u8, g: u8, b: u8) -> u32 {
-    (r as u32) << 24 | (g as u32) << 16 | (b as u32) << 8
-}
 
 fn main() {
     rosrust::init("image_viewer");
