@@ -1,6 +1,6 @@
 mod utility;
 
-use byteorder::{WriteBytesExt, BigEndian};
+use byteorder::{BigEndian, WriteBytesExt};
 use pixels::{Pixels, SurfaceTexture};
 use rosrust_msg::sensor_msgs::Image;
 // use rosrust::api::raii as ros;
@@ -20,7 +20,13 @@ fn main() {
     let (window, p_width, p_height, mut _hidpi_factor) =
         create_window("Image Viewer", screen_width, screen_height, &event_loop);
     let surface_texture = SurfaceTexture::new(p_width, p_height, &window);
-    rosrust::ros_info!("{} {}, {} {}", screen_width, screen_height, p_width, p_height);
+    rosrust::ros_info!(
+        "{} {}, {} {}",
+        screen_width,
+        screen_height,
+        p_width,
+        p_height
+    );
 
     // TODO(lucasw) The compiler says this shouldn't be mut, but why not?  It's mut later
     // when it is extracted from the mutex.
@@ -50,8 +56,17 @@ fn main() {
                 }
                 let msg_byte_base_ind = (y * msg.width + x) as u32 * channels;
                 if (msg_byte_base_ind + 2) as usize >= msg.data.len() {
-                    eprintln!("{} {} -> {} {}, {} >= {}, msg {} x {}", count, screen_width, x, y,
-                              msg_byte_base_ind, msg.data.len(), msg.width, msg.height);
+                    rosrust::ros_warn!(
+                        "{} {} -> {} {}, {} >= {}, msg {} x {}",
+                        count,
+                        screen_width,
+                        x,
+                        y,
+                        msg_byte_base_ind,
+                        msg.data.len(),
+                        msg.width,
+                        msg.height
+                    );
                     break;
                 }
                 let msg_byte_base_ind = msg_byte_base_ind as usize;
@@ -65,7 +80,13 @@ fn main() {
             // This skips the pixel buffer and write to the screen,
             // which won't be scaled after a resize
             // screen[viewer_ind] = *pixel;
-            rosrust::ros_info!("msg {} {}, frame {} {}", msg.width, msg.height, screen_width, screen_height);
+            rosrust::ros_info!(
+                "msg {} {}, frame {} {}",
+                msg.width,
+                msg.height,
+                screen_width,
+                screen_height
+            );
         }
     };
 

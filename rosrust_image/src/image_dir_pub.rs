@@ -14,9 +14,8 @@ use rosrust_msg::sensor_msgs;
 // use std::sync::{Arc, Mutex};
 // use utility::from_rgb;
 use std::ffi::OsStr;
-use std::{env, fs};
 use std::io::{Error, ErrorKind};
-
+use std::{env, fs};
 
 fn to_image_msg(img: image::DynamicImage) -> sensor_msgs::Image {
     let img_sz = img.dimensions();
@@ -69,28 +68,34 @@ fn publish_if_image(
                     // the trait `From<rosrust::error::Error>` is not implemented for `std::io::Error`
                     // image_pub.send(msg)?;
                     image_pub.send(msg).unwrap();
-                    return Ok("publish".to_string());
+                    Ok("publish".to_string())
                 } else {
                     // TODO(lucasw) but possible some images are failing to load for other reasons?
-                    return Err(Error::new(ErrorKind::Other, "not a supported image file"));
+                    Err(Error::new(ErrorKind::Other, "not a supported image file"))
                 }
             } else {
-                return Err(Error::new(ErrorKind::Other, "not a file"));
+                Err(Error::new(ErrorKind::Other, "not a file"))
             }
         }
     }
-    Err(Error::new(ErrorKind::Other, "shouldn't reach here"))
+    // unreachable
+    // Err(Error::new(ErrorKind::Other, "shouldn't reach here"))
 }
 
+/*
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
 }
+*/
 
 fn main() {
     env_logger::init();
     rosrust::init("image_dir_pub");
 
-    let update_period = rosrust::param("~update_period").unwrap().get().unwrap_or(0.2);
+    let update_period = rosrust::param("~update_period")
+        .unwrap()
+        .get()
+        .unwrap_or(0.2);
     rosrust::ros_info!("update period: {}", update_period);
     let rate = rosrust::rate(1.0 / update_period);
     let image_pub = rosrust::publish("image", 4).unwrap();
@@ -104,7 +109,7 @@ fn main() {
             }
             // print_type_of(&entry_result);
             let rv = publish_if_image(entry_result, &image_pub);
-            if let Ok(_) = rv {
+            if rv.is_ok() {
                 num_pubs += 1;
                 rate.sleep();
             }
