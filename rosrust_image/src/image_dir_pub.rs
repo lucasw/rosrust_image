@@ -15,7 +15,7 @@ use rosrust_msg::sensor_msgs;
 // use utility::from_rgb;
 use std::ffi::OsStr;
 use std::io::{Error, ErrorKind};
-use std::{env, fs};
+use std::fs;
 
 fn to_image_msg(img: image::DynamicImage) -> sensor_msgs::Image {
     let img_sz = img.dimensions();
