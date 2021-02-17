@@ -101,7 +101,10 @@ fn main() {
     let image_dir = rosrust::param("~image_dir")
         .unwrap()
         .get()
-        .unwrap_or(".".to_string());
+        // TODO(lucasw) clipppy says this is better, because the string is only generated
+        // when the or condition needs it to.
+        .unwrap_or_else(|_| ".".to_string());
+        // .unwrap_or(".".to_string());
     let publish_rate: f64 = rosrust::param("~publish_rate")
         .unwrap()
         .get()
