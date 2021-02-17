@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="image_dir" default="$(env HOME)/Videos/starfield/small" />
 
-  <node pkg="image_publisher" type="image_publisher"
-    name="image_pub" output="screen"
-    args="$(find image_manip)/data/lava.jpg" >
-    <param name="publish_rate" value="10.0"/>
+  <node pkg="rosrust_image" type="image_dir_pub"
+    name="image_dir_pub" output="screen" >
+    <param name="image_dir" value="$(arg image_dir)" />
+    <param name="publish_rate" value="8.0"/>
   </node>
 
   <node pkg="rosrust_image" type="image_viewer"
     name="image_viewer" output="screen" >
-    <remap from="image_in" to="image_pub/image_raw" />
+    <remap from="image_in" to="image" />
   </node>
 
 </launch>

@@ -30,6 +30,7 @@ fn to_image_msg(img: image::DynamicImage) -> sensor_msgs::Image {
     msg.step = msg.width * 3;
     let size = (msg.step * msg.height) as usize;
     msg.data.resize(size, 0);
+
     // TODO(lucasw) something with zip to iterate through msg.data and img
     // together?
     for (i, pixel) in img.pixels().enumerate() {
@@ -45,20 +46,21 @@ fn to_image_msg(img: image::DynamicImage) -> sensor_msgs::Image {
 }
 
 fn publish_if_image(
-    entry_result: Result<fs::DirEntry, Error>,
+    entry: fs::DirEntry,
     image_pub: &rosrust::Publisher<sensor_msgs::Image>,
 ) -> Result<String, Error> {
     // TODO(lucasw) some kinds of errors are normal and should be ignored,
     // for example if not a file
     // if let Ok(entry) = entry_result {
-    let entry = entry_result?;
+    // let entry = entry_result?;
     {
         let path = entry.path();
         let metadata = fs::metadata(&path)?;
         {
             if metadata.is_file() {
-                let _extension = path.extension().unwrap_or_else(|| OsStr::new("none"));
-                // println!("{:?} extension -> {:?}", &path, extension);
+                let extension = path.extension().unwrap_or_else(|| OsStr::new("none"));
+                // TODO(lucasw) publish the path in an adjacent string message
+                rosrust::ros_info!("{:?} extension -> {:?}", &path, extension);
                 // skip if not 'png' or 'jpg' or 'jpeg'?
                 // TODO(lucasw) handle gifs and iterate through frames
                 // TODO(lucasw) load cached msg if no changes
@@ -92,23 +94,37 @@ fn main() {
     env_logger::init();
     rosrust::init("image_dir_pub");
 
-    let update_period = rosrust::param("~update_period")
+    // let current_dir = env::current_dir().unwrap().to_str();
+
+    // &str doesn't work as a param, it will compile but the param
+    // won't get loaded.
+    let image_dir = rosrust::param("~image_dir")
         .unwrap()
         .get()
-        .unwrap_or(0.2);
-    rosrust::ros_info!("update period: {}", update_period);
-    let rate = rosrust::rate(1.0 / update_period);
+        .unwrap_or(".".to_string());
+    let publish_rate: f64 = rosrust::param("~publish_rate")
+        .unwrap()
+        .get()
+        .unwrap_or(5.0);
+    rosrust::ros_info!("publish rate: {}", publish_rate);
+    let rate = rosrust::rate(publish_rate);
     let image_pub = rosrust::publish("image", 4).unwrap();
 
+    rosrust::ros_info!("image dir: '{}'", image_dir);
+    let image_path = std::path::Path::new(&image_dir);
     while rosrust::is_ok() {
         let mut num_pubs = 0;
-        let current_dir = env::current_dir().unwrap();
-        for entry_result in fs::read_dir(current_dir).unwrap() {
+        let mut paths: Vec<_> = fs::read_dir(&image_path)
+            .unwrap()
+            .map(|r| r.unwrap())
+            .collect();
+        paths.sort_by_key(|dir| dir.path());
+        for path in paths {
             if !rosrust::is_ok() {
                 break;
             }
             // print_type_of(&entry_result);
-            let rv = publish_if_image(entry_result, &image_pub);
+            let rv = publish_if_image(path, &image_pub);
             if rv.is_ok() {
                 num_pubs += 1;
                 rate.sleep();
