@@ -83,48 +83,6 @@ jobs:
             source /opt/ros/$ROS_DISTRO/setup.bash
             cd catkin_ws
             sudo rosdep install --from-paths src --ignore-src -r -y
-      - name: Install ROS additional packages (TODO maybe don't need these)
-        run: |
-            sudo apt-get install -y ros-$ROS_DISTRO-actionlib
-            sudo apt-get install -y ros-$ROS_DISTRO-actionlib-msgs
-            sudo apt-get install -y ros-$ROS_DISTRO-camera-info-manager
-            sudo apt-get install -y ros-$ROS_DISTRO-compressed-image-transport
-            sudo apt-get install -y ros-$ROS_DISTRO-catkin
-            sudo apt-get install -y ros-$ROS_DISTRO-class-loader
-            sudo apt-get install -y ros-$ROS_DISTRO-cmake-modules
-            sudo apt-get install -y ros-$ROS_DISTRO-cv-bridge
-            sudo apt-get install -y ros-$ROS_DISTRO-dynamic-reconfigure
-            sudo apt-get install -y ros-$ROS_DISTRO-ddynamic-reconfigure
-            # Not in noetic yet
-            # sudo apt-get install -y ros-$ROS_DISTRO-ddynamic-reconfigure-python
-            sudo apt-get install -y ros-$ROS_DISTRO-eigen-conversions
-            sudo apt-get install -y ros-$ROS_DISTRO-geometry-msgs
-            sudo apt-get install -y ros-$ROS_DISTRO-genmsg
-            sudo apt-get install -y ros-$ROS_DISTRO-image-geometry
-            sudo apt-get install -y ros-$ROS_DISTRO-image-proc
-            sudo apt-get install -y ros-$ROS_DISTRO-image-transport
-            sudo apt-get install -y ros-$ROS_DISTRO-message-generation
-            sudo apt-get install -y ros-$ROS_DISTRO-message-runtime
-            # sudo apt-get install -y ros-$ROS_DISTRO-nodelet-core
-            # sudo apt-get install -y ros-$ROS_DISTRO-nodelet-topic-tools
-            # sudo apt-get install -y ros-$ROS_DISTRO-pcl-conversions
-            # sudo apt-get install -y ros-$ROS_DISTRO-pcl-ros
-            sudo apt-get install -y ros-$ROS_DISTRO-pluginlib
-            sudo apt-get install -y ros-$ROS_DISTRO-roscpp
-            sudo apt-get install -y ros-$ROS_DISTRO-roslib
-            sudo apt-get install -y ros-$ROS_DISTRO-roslint
-            sudo apt-get install -y ros-$ROS_DISTRO-rospy
-            sudo apt-get install -y ros-$ROS_DISTRO-rospy-message-converter
-            sudo apt-get install -y ros-$ROS_DISTRO-rostest
-            sudo apt-get install -y ros-$ROS_DISTRO-sensor-msgs
-            sudo apt-get install -y ros-$ROS_DISTRO-std-msgs
-            sudo apt-get install -y ros-$ROS_DISTRO-tf
-            sudo apt-get install -y ros-$ROS_DISTRO-tf-conversions
-            sudo apt-get install -y ros-$ROS_DISTRO-tf2-geometry-msgs
-            sudo apt-get install -y ros-$ROS_DISTRO-tf2-msgs
-            sudo apt-get install -y ros-$ROS_DISTRO-tf2-py
-            sudo apt-get install -y ros-$ROS_DISTRO-tf2-ros
-            sudo apt-get install -y ros-$ROS_DISTRO-tf2-sensor-msgs
       - name: build
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
