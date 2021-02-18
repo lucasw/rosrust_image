@@ -84,7 +84,12 @@ fn main() {
     let (tx, rx) = crossbeam_channel::unbounded();
     let image_callback = {
         move |msg: Image| {
-            if let Ok(_) = tx.send(msg) {
+            if let Err(err) = tx.send(msg) {
+                // an error on shutdown isn't interesting (though preventing those
+                // in the future would be nice
+                if rosrust::is_ok() {
+                    eprintln!("{:?}", err);
+                }
             }
         }
     };
