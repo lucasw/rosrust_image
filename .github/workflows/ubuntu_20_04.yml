@@ -82,6 +82,7 @@ jobs:
         run: |
             source /opt/ros/$ROS_DISTRO/setup.bash
             cd catkin_ws
+            rosdep install --from-paths src --ignore-src -r -s  # do a dry-run first
             rosdep install --from-paths src --ignore-src -r -y
       - name: build
         run: |
