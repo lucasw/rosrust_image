@@ -11,8 +11,12 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit_input_helper::WinitInputHelper;
 
 // rosrust::ros_info!("msg {} {} {} {}", msg.width, msg.height, msg.encoding, msg.data.len());
-fn image_msg_to_pixels(msg: Image, screen: &mut [u8],
-        screen_width: u32, screen_height: u32) {
+fn image_msg_to_pixels(
+    msg: Image,
+    screen: &mut [u8],
+    screen_width: u32,
+    _screen_height: u32
+) {
     // TODO(lucasw) check encoding
     let channels = 3;
     for (count, mut pix) in screen.chunks_exact_mut(4).enumerate() {
@@ -47,6 +51,7 @@ fn image_msg_to_pixels(msg: Image, screen: &mut [u8],
         );
         pix.write_u32::<BigEndian>(val).unwrap();
     }
+    /*
     rosrust::ros_debug!(
         "msg {} {}, frame {} {}",
         msg.width,
@@ -54,6 +59,7 @@ fn image_msg_to_pixels(msg: Image, screen: &mut [u8],
         screen_width,
         screen_height,
     );
+    */
 }
 
 fn main() {
@@ -78,7 +84,8 @@ fn main() {
     let (tx, rx) = crossbeam_channel::unbounded();
     let image_callback = {
         move |msg: Image| {
-            tx.send(msg).unwrap();
+            if let Ok(_) = tx.send(msg) {
+            }
         }
     };
     let _image_sub = rosrust::subscribe("image_in", 4, image_callback).unwrap();
